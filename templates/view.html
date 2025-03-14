@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Photo.Filename}} - Photo Viewer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container single-photo">
+        <div class="nav-header">
+            <div class="back-link">
+                <a href="/" class="back-button">← Back to Gallery</a>
+            </div>
+        </div>
+        <div class="photo-view">
+            <img src="/{{.Photo.Path}}" alt="{{.Photo.Filename}}">
+        </div>
+        <div class="action-buttons">
+            <a href="/{{.Photo.Path}}" download="{{.Photo.Filename}}" class="download-button">Download</a>
+        </div>
+    </div>
+</body>
+</html>
