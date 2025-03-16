@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
 	"log"
@@ -36,9 +37,12 @@ var validExtensions = map[string]bool{
 	".gif":  true,
 }
 
+//go:embed static templates
+var content embed.FS
+
 func main() {
 	// Serve static files (CSS)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(content))))
 
 	// Serve photo directory
 	http.Handle("/pictures/", http.StripPrefix("/pictures/", http.FileServer(http.Dir("pictures"))))
@@ -69,7 +73,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render template
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFS(content, "templates/index.html")
 	if err != nil {
 		http.Error(w, "Failed to load template: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -104,7 +108,7 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render template
-	tmpl, err := template.ParseFiles("templates/view.html")
+	tmpl, err := template.ParseFS(content, "templates/view.html")
 	if err != nil {
 		http.Error(w, "Failed to load template: "+err.Error(), http.StatusInternalServerError)
 		return
