@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -41,8 +42,15 @@ var validExtensions = map[string]bool{
 var content embed.FS
 
 func main() {
+
+	staticFS, err := fs.Sub(content, "static")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// Serve static files (CSS)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(content))))
+	//http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(content))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
 	// Serve photo directory
 	http.Handle("/pictures/", http.StripPrefix("/pictures/", http.FileServer(http.Dir("pictures"))))
