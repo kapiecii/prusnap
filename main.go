@@ -49,7 +49,6 @@ func main() {
 	}
 
 	// Serve static files (CSS)
-	//http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(content))))
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
 	// Serve photo directory
